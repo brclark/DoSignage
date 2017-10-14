@@ -1,0 +1,25 @@
+{
+  "name": "dosignage",
+  "version": "0.0.1",
+  "description": "Scraper and Client",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brclark/DoSignage.git"
+  },
+  "keywords": [
+    "Raspberry",
+    "Pi",
+    "Signage",
+    "App"
+  ],
+  "author": "ksjoseph & bclark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brclark/DoSignage/issues"
+  },
+  "homepage": "https://github.com/brclark/DoSignage#readme"
+}
