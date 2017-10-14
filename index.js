@@ -1,6 +1,6 @@
 const http = require('http')
 const path = require('path')
-const phantom = require('phantomjs')
+const phantom = require('phantomjs-prebuilt')
 const { spawn } = require('child_process')
 const port = 3000
 
@@ -20,7 +20,6 @@ server.listen(port, (err) => {
 })
 
 const p = spawn(phantom.path, ['./phantom-job.js'])
-
 p.stdout.setEncoding('utf8')
 p.stderr.setEncoding('utf8')
 
@@ -35,5 +34,4 @@ p.stderr.on('data', (data) => {
 p.on('error', (data) => {
   console.log("err:",  data )
 })
-
 
