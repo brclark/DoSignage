@@ -25,15 +25,15 @@ p.stdout.setEncoding('utf8')
 p.stderr.setEncoding('utf8')
 
 p.stdout.on('data', (data) => {
-  console.log("stdout:", JSON.stringify( data ) )
+  console.log("stdout:", data )
 })
 
 p.stderr.on('data', (data) => {
-  console.log("stderr:", JSON.stringify( data ) )
+  console.log("stderr:" data )
 })
 
 p.on('error', (data) => {
-  console.log("err:", JSON.stringify( data ) )
+  console.log("err:",  data )
 })
 
 
