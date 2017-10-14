@@ -1,10 +1,8 @@
 const http = require('http')
 const path = require('path')
-const phantom = require('phantom')
-const binPath = phantom.path
+const phantom = require('phantomjs')
+const { spawn } = require('child_process')
 const port = 3000
-
-var spawn = require('child_process').spawn
 
 const requestHandler = (request, response) => {
   console.log(request.url)
@@ -21,9 +19,21 @@ server.listen(port, (err) => {
   console.log(`server is listening on ${port}`)
 })
 
-var childArgs = [
-    './phantom-job.js'
-]
-console.log(binPath)
+const p = spawn(phantom.path, ['./phantom-job.js'])
 
-spawn('phantomjs', ['phantom-job.js'])
+p.stdout.setEncoding('utf8')
+p.stderr.setEncoding('utf8')
+
+p.stdout.on('data', (data) => {
+  console.log("stdout:", JSON.stringify( data ) )
+})
+
+p.stderr.on('data', (data) => {
+  console.log("stderr:", JSON.stringify( data ) )
+})
+
+p.on('error', (data) => {
+  console.log("err:", JSON.stringify( data ) )
+})
+
+
