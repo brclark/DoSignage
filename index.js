@@ -29,7 +29,7 @@ p.stdout.on('data', (data) => {
 })
 
 p.stderr.on('data', (data) => {
-  console.log("stderr:" data )
+  console.log("stderr:", data )
 })
 
 p.on('error', (data) => {
