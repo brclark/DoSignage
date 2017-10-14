@@ -1,10 +1,10 @@
-const http = require("http")
+const http = require('http')
 const path = require('path')
-const phantom = require("phantom")
-const childProcess = require('child_process')
+const phantom = require('phantom')
 const binPath = phantom.path
 const port = 3000
 
+var spawn = require('child_process').spawn
 
 const requestHandler = (request, response) => {
   console.log(request.url)
@@ -21,23 +21,9 @@ server.listen(port, (err) => {
   console.log(`server is listening on ${port}`)
 })
 
+var childArgs = [
+    './phantom-job.js'
+]
+console.log(binPath)
 
-var url = "http://do314.com"
-var _ph, _page, _outObj;
-
-phantom.create().then(function(ph){
-    _ph = ph;
-    return _ph.createPage();
-}).then(function(page){
-    _page = page;
-    return _page.open(url);
-}).then(function(status){
-    console.log(status);
-    return _page.property('content')
-}).then(function(content){
-    console.log(content);
-    _page.close();
-    _ph.exit();
-}).catch(function(e){
-   console.log(e); 
-});
+spawn('phantomjs', ['phantom-job.js'])
