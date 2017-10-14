@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/brclark/DoSignage#readme",
   "dependencies": {
-    "phantom": "^4.0.5",
     "phantomjs": "^2.1.7"
   }
 }
