@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/brclark/DoSignage#readme",
   "dependencies": {
-    "phantomjs-prebuilt": "^2.1.15"
+    "phantomjs-prebuilt": "^2.1.15",
+    "winston": "^2.4.0"
   }
 }
