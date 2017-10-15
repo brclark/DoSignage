@@ -24,20 +24,14 @@ p.stdout.setEncoding('utf8')
 p.stderr.setEncoding('utf8')
 
 p.stdout.on('data', (data) => {
-  winston.log('info', 'phantom-js', {
-    stdout: `${data}`
-  })
+  winston.log('info', 'phantom-js', { stdout: `${data}` })
 })
 
 p.stderr.on('data', (data) => {
-  winston.log('error', 'phantom-js', {
-    stderr: `${data}`
-  })
+  winston.log('error', 'phantom-js', { stderr: `${data}` })
 })
 
 p.on('error', (data) => {
-  winston.log('error', 'spawn', {
-    child_process_error: `${data}`
-  })
+  winston.log('error', 'spawn', { child_process_error: `${data}` })
 })
 
