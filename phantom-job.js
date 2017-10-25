@@ -1,9 +1,39 @@
 "use strict";
 var system = require('system')
+var args = system.args
 var fs = require('fs')
 var page = require('webpage').create()
-var url = "http://do314.com"
-var path = './event_list.json'
+
+var urls =
+  {
+    "314":"http://do314.com",
+    "312":"http://do312.com",
+    "SD":"http://dosd.com"
+  }
+
+var url = undefined
+var path = undefined
+
+switch(args.length)
+{
+  case 1:
+    url = urls["314"]
+    path = './event-list.json'
+    break
+  case 3:
+    url = urls[args[1]]
+    if (url === undefined) {
+      url = urls["314"]
+    }
+    path = './' + args[2]
+    break
+  default:
+    console.error("usage: phantomjs phantom-job.js <location> <output_file name>")
+    phantom.exit(1)
+    break
+}
+
+console.log(url)
 
 page.onConsoleMessage = function(msg) {
   console.log('CONSOLE: ' + msg)
@@ -61,7 +91,7 @@ page.open( url, function( status ) {
         console.error(err)
       }
     })
-    console.log(' Stored events in event_list.json ')
+    console.log(' Stored events in ' + path)
   }
   console.log( "phantom job complete. exiting." )
   phantom.exit();
