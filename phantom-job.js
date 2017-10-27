@@ -77,7 +77,7 @@ page.open( url, function( status ) {
 
         var time = $(this).find('.ds-event-time').text().trim()
 
-        data.events.push({'title':title,'img-url':image_url, 'location':locat, 'time':time})
+        data.events.push({'title':title,'img_url':image_url, 'location':locat, 'time':time})
       })
       var font_props = $("#ds-events-list-outlet .ds-listing:first").css(["font-family", "font-size", "font-weight"])
       data.font = font_props
