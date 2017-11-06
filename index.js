@@ -27,7 +27,7 @@ function parse_events() {
     winston.log('error', 'node-app', {stderr: `${err}`})
   })
   var event_list = JSON.parse(contents)
-  var image_dir = "./img/"
+  var image_dir = "./client/public/assets/img/"
   var download = function(uri, filename, callback) {
     request.head(uri, function(err, res, body) {
       request(uri).pipe(fs.createWriteStream(filename)).on('close', callback)
@@ -38,7 +38,7 @@ function parse_events() {
     fs.mkdirSync(image_dir)
   }
   for (var i = 0; i < event_list.events.length; i++) {
-    download(event_list.events[i].img_url, image_dir + i + '-' + event_list.events[i].title + '.jpg', function() {})
+    download(event_list.events[i].img_url, image_dir + i + '.jpg', function() {})
   }
 }
 
