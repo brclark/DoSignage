@@ -67,7 +67,7 @@ page.open( url, function( status ) {
        * - Should define the events key's as constants
        * - Should define the jquery selectors as constants somewhere
        */
-      $('#ds-events-list-outlet .ds-listing').each(function() {
+      $('#ds-events-list-outlet .ds-listing').each(function(index) {
         var title = $(this).find(".ds-listing-event-title-text").text()
 
         var image_url = $(this).find(".ds-cover-image").css('background-image')
@@ -77,7 +77,7 @@ page.open( url, function( status ) {
 
         var time = $(this).find('.ds-event-time').text().trim()
 
-        data.events.push({'title':title,'img_url':image_url, 'location':locat, 'time':time})
+        data.events.push({'id':index, 'title':title,'img_url':image_url, 'location':locat, 'time':time})
       })
       var font_props = $("#ds-events-list-outlet .ds-listing:first").css(["font-family", "font-size", "font-weight"])
       data.font = font_props
