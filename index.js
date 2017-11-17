@@ -8,6 +8,7 @@ var fs = require('fs')
 var request = require('request')
 var cron = require('node-cron')
 var express = require('express')
+var cors = require('cors')
 var app = express()
 var rimraf = require('rimraf')
 
@@ -89,8 +90,14 @@ class DoCityJson {
 
 var do_city = new DoCityJson()
 
-app.get('/', (req, res) => {
-  res.send(do_city.event_list)
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.get('/events', (req, res) => {
+  res.json(do_city.event_list)
 })
 
 app.listen(3000)
