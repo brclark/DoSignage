@@ -11,6 +11,7 @@ var express = require('express')
 var cors = require('cors')
 var app = express()
 var rimraf = require('rimraf')
+var mkdirp = require('mkdirp')
 
 const requestHandler = (request, response) => {
   winston.log('info', 'node-app', { log: request.url })
@@ -19,7 +20,7 @@ const requestHandler = (request, response) => {
 class DoCityJson {
   constructor () {
     this.e_list = null
-    this.image_dir = "./client/public/assets/img/"
+    this.img_dir = "./client/public/assets/img/"
   }
 
   get event_list() {
@@ -38,8 +39,10 @@ class DoCityJson {
    */
   updateEventList(callback) {
     fs.readFile('./event-list.json', (err, data) => {
-      winston.log('error', 'node-app', {stderr: `${err}`})
-      if (!err) {
+      if (err) {
+        winston.log('error', 'node-app', {stderr: `${err}`})
+        return callback(err)
+      } else {
         this.e_list = JSON.parse(data)
       }
       this.downloadImages(callback)
@@ -54,38 +57,47 @@ class DoCityJson {
    */
   downloadImages(callback) {
     var download = function(uri, filename, cb) {
-      request.head(uri, function(err, res, body) {
-          if (err) {
-            winston.log('error', 'request', {stderr: "request error"})
-          }
-          request(uri, function(err) {
-            if (err) {
-              winston.log('error', 'request', {stderr: "request error"})
-            }
-          }).pipe(fs.createWriteStream(filename)).on('close', cb)
-        })
+      request(uri, (err, res, body) => {
+        if (err) {
+          winston.log('error', 'request', {stderr: `${err}` })
+          return cb(err)
+        }
+      }).pipe(fs.createWriteStream(filename))
+          .on('close', () => { cb(null) })
+          .on('err', (err) => { return cb(err) })
     }
 
     if (!this.e_list) {
-      return new Error("no json file yet")
+      return callback(new Error("no json file yet"))
     }
 
-    if (!fs.existsSync(this.image_dir)) {
-      fs.mkdir(this.image_dir, (err) => {
-        if (err)
-          return err
-      })
-    } else {
-      rimraf(this.image_dir, () => {
-        console.log('rm')
+    /* _downloadImages()
+     *
+     * Helper function to download the images in parallel
+     */
+    let _downloadImages = () => {
+      let downloaded = 0, hasErrors = false
+      this.e_list.events.forEach( (e) => {
+        download(e.img_url, this.img_dir + e.id + '.jpg', (err) => {
+          if (err) {
+            hasErrors = true
+            return callback(err)
+          }
+        })
+        delete(e.img_url)
+        if (++downloaded === this.e_list.events.length && !hasErrors)
+          callback(null, "Successfully downloaded " + downloaded + " images")
       })
     }
-    this.e_list.events.forEach( (e) => {
-      download(e.img_url, this.image_dir + e.id + '.jpg', () => {})
-      delete(e.img_url)
+
+    /* Delete previous image directory */
+    rimraf(this.img_dir, () => {
+      // Download images once old img dir is removed
+      mkdirp(this.img_dir, _downloadImages)
     })
-    callback()
+
   }
+
 }
 
 var do_city = new DoCityJson()
@@ -117,8 +129,8 @@ function phantom_web_scrape(callback) {
     winston.log('error', 'phantom-js', { stderr: `${data}` })
   })
 
-  p.on('error', (data) => {
-    winston.log('error', 'spawn', { child_process_error: `${data}` })
+  p.on('error', (err) => {
+    winston.log('error', 'spawn', { child_process_error: `${err}` })
   })
 
   p.on('close', (message) => {
@@ -127,8 +139,12 @@ function phantom_web_scrape(callback) {
   })
 }
 
-phantom_web_scrape(() => {
-  winston.log('info', 'scrape', { stdout: "done" } )
+phantom_web_scrape((err, data) => {
+  if (err) {
+    winston.log('error', 'scrape', { stderr: `${err}` } )
+  } else {
+    winston.log('info', 'scrape', { stdout: `${data}`} )
+  }
 })
 // Currently set to scrape once every minute
 //cron.schedule('* * * * *', phantom_web_scrape(parse_events))
