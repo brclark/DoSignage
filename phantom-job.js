@@ -82,6 +82,9 @@ page.open( url, function( status ) {
       var font_props = $("#ds-events-list-outlet .ds-listing:first").css(["font-family", "font-size", "font-weight"])
       data.font = font_props
 
+      var logo_url = $('#ds-mobile-logo-wrap img')[0].src
+      data.logo_url = logo_url
+
       return data
     })
 

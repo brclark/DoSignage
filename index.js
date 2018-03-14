@@ -88,6 +88,12 @@ class DoCityJson {
         if (++downloaded === this.e_list.events.length && !hasErrors)
           callback(null, "Successfully downloaded " + downloaded + " images")
       })
+
+      download(this.e_list.logo_url, this.img_dir + 'logo.jpg', (err) => {
+        if (err) {
+          return callback(err)
+        }
+      })
     }
 
     /* Delete previous image directory */
