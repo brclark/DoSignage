@@ -118,6 +118,11 @@ app.get('/events', (req, res) => {
   res.json(do_city.event_list)
 })
 
+app.use(express.static(__dirname + '/client/dist'))
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/client/dist/index.html')
+})
+
 app.listen(3000)
 
 function phantom_web_scrape(callback) {

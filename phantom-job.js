@@ -67,7 +67,7 @@ page.open( url, function( status ) {
        * - Should define the events key's as constants
        * - Should define the jquery selectors as constants somewhere
        */
-      $('#ds-events-list-outlet .ds-listing').each(function(index) {
+      $('#ds-events-list-outlet .ds-listing').not('#ds-repeating-ongoing-widget .ds-listing').each(function(index) {
         var title = $(this).find(".ds-listing-event-title-text").text()
 
         var image_url = $(this).find(".ds-cover-image").css('background-image')
